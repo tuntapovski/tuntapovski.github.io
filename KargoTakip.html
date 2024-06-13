@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Kargo Takip</title>
+	</head>
+	<body>
+		Kargo Takip No: <input id="no">
+		<p>
+		<p>
+		<pre id="result"></pre>
+		
+		<script>
+			let i = document.querySelector('#no');
+			let r = document.querySelector('#result');
+			let db = [
+				'https://gonderitakip.PTT.gov.tr/Track/Verify?q=@@',
+				'http://kargotakip.ARASkargo.com.tr/mainpage.aspx?code=@@#ui-tabs-2',
+				'https://kargotakip.MNGkargo.com.tr/gonderi-takip-detay?takipNo=@@',
+				'https://www.YURTICIkargo.com/tr/online-servisler/gonderi-sorgula?code=@@',
+				'https://www.SURATkargo.com.tr/KargoTakip/?kargotakipno=@@',
+				'https://HEPSIjet.com/gonderi-takibi/@@',
+				'https://www.UPS.com.tr/WaybillSorgu.aspx?Waybill=@@',
+				'https://www.DHL.com.tr/exp-tr/express/tracking.html?AWB=@@&brand=DHL',
+				'https://kargotakip.TRENDYOL.com/?orderNumber=@@'
+			];
+			
+			i.onkeyup = () => {
+				r.innerHTML = db.map(e => e.replace('@@', i.value.trim())).join('\n\n');
+			}
+		</script>
+	</body>
+</html>
