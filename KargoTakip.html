@@ -6,8 +6,9 @@
 		<link rel="stylesheet" href="https://mincss.com/entireframework.min.css">
 	</head>
 	<body>
-		<div class="msg">
-			<input id="no" placeholder="Kargo Takip No">
+		<div class="container">
+			<h5></h5>
+			<input id="no" placeholder="Kargo Takip No"> <button class="btn btn-b btn-sm" id="copy">Copy</button>
 			<p>
 			<p>
 			<pre id="result"></pre>
@@ -29,8 +30,11 @@
 			];
 			
 			i.onkeyup = () => {
+				if (i.value.trim().length == 0) { r.innerHTML = ''; return; };
 				r.innerHTML = db.map(e => e.replace('@@', i.value.trim())).join('\n\n');
 			}
+			
+			document.querySelector('#copy').onclick = () => { navigator.clipboard.writeText(r.innerHTML); };
 		</script>
 	</body>
 </html>
