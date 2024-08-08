@@ -8,15 +8,17 @@
 	<body>
 		<div class="container">
 			<h5></h5>
-			<input id="no" placeholder="Kargo Takip No"> <button class="btn btn-b btn-sm" id="copy">Copy</button>
+			<input id="no" placeholder="Kargo Takip No"> <input id="filter" placeholder="Filtre"> <button class="btn btn-b btn-sm" id="copy">Kopyala</button>
 			<p>
 			<p>
 			<pre id="result"></pre>
 		</div>
 		
 		<script>
-			let i = document.querySelector('#no');
+			let n = document.querySelector('#no');
 			let r = document.querySelector('#result');
+			let f = document.querySelector('#filter');
+			let c = document.querySelector('#copy');
 			let db = [
 				'https://gonderitakip.PTT.gov.tr/Track/Verify?q=@@',
 				'http://kargotakip.ARASkargo.com.tr/mainpage.aspx?code=@@#ui-tabs-2',
@@ -29,12 +31,17 @@
 				'https://kargotakip.TRENDYOL.com/?orderNumber=@@'
 			];
 			
-			i.onkeyup = () => {
-				if (i.value.trim().length == 0) { r.innerHTML = ''; return; };
-				r.innerHTML = db.map(e => e.replace('@@', i.value.trim())).join('\n\n');
+			function input_handler() {
+				if (n.value.trim().length == 0) { r.innerHTML = ''; return; }
+				let data = db.map(e => e.replace('@@', n.value.trim()))
+				let i = new RegExp(f.value.trim() || '.', "i")
+				data = data.filter(e => i.test(e));
+				r.innerHTML = data.join('\n\n');
 			}
 			
-			document.querySelector('#copy').onclick = () => { navigator.clipboard.writeText(r.innerHTML); };
+			f.oninput = input_handler;
+			n.oninput = input_handler;
+			c.onclick = () => { navigator.clipboard.writeText(r.innerHTML); }
 		</script>
 	</body>
 </html>
