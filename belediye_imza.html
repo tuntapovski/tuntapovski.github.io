@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İmar ve Yapı Ruhsatı Portalları</title>
+    <title>Kısayollar</title>
     <style>
         :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --text-muted: #666666;
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --border-color: #e5e7eb;
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --btn-bg: #ffffff;
+            --btn-text: #2563eb;
+            --btn-border: #e2e8f0;
+            --btn-hover-bg: #f1f5f9;
+            --separator-color: #e2e8f0;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-color: #0f172a;
-                --card-bg: #1e293b;
                 --text-color: #f8fafc;
-                --text-muted: #94a3b8;
-                --primary-color: #3b82f6;
-                --primary-hover: #60a5fa;
-                --border-color: #334155;
+                --btn-bg: #1e293b;
+                --btn-text: #3b82f6;
+                --btn-border: #334155;
+                --btn-hover-bg: #1e293b;
+                --separator-color: #334155;
             }
         }
 
@@ -34,169 +34,119 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.5;
             padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 600px;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        header h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .links-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        @media (min-width: 600px) {
-            .links-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-info h2 {
-            font-size: 1.2rem;
+        h1 {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            opacity: 0.9;
         }
 
-        .card-info p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            word-break: break-all;
-            margin-bottom: 1rem;
+        /* Butonların yan yana ve esnek dizilmesi için */
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            align-items: center;
         }
 
-        .btn {
+        .portal-btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            background-color: var(--primary-color);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--btn-border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: background-color 0.2s ease;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
-        .btn:hover {
-            background-color: var(--primary-hover);
+        .portal-btn:hover {
+            background-color: var(--btn-hover-bg);
+            transform: translateY(-1px);
         }
 
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        /* Dinamik eklenen yatay çizgi stili */
+        .separator {
+            flex-basis: 100%;
+            height: 1px;
+            background-color: var(--separator-color);
+            margin: 0.75rem 0;
+            border: none;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="links-grid">
-	     <!-- ParselSorgu -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Parsel Sorgu</h2>
-                <p>https://parselsorgu.tkgm.gov.tr/</p>
-            </div>
-            <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-		
-        <!-- Akhisar -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Akhisar Belediyesi</h2>
-                <p>https://yapiruhsati.akhisar.bel.tr:8080/</p>
-            </div>
-            <a href="https://yapiruhsati.akhisar.bel.tr:8080/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-
-        <!-- Salihli -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Salihli Belediyesi</h2>
-                <p>https://imar.salihli.bel.tr/</p>
-            </div>
-            <a href="https://imar.salihli.bel.tr/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-
-        <!-- Soma -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Soma Belediyesi</h2>
-                <p>https://yapiruhsati.soma.bel.tr/</p>
-            </div>
-            <a href="https://yapiruhsati.soma.bel.tr/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-
-        <!-- Turgutlu -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Turgutlu Belediyesi</h2>
-                <p>https://yapiruhsati.turgutlu.bel.tr:5443/</p>
-            </div>
-            <a href="https://yapiruhsati.turgutlu.bel.tr:5443/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-
-        <!-- Yunusemre -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Yunusemre Belediyesi</h2>
-                <p>https://universe.yunusemre.bel.tr/</p>
-            </div>
-            <a href="https://universe.yunusemre.bel.tr/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-		
-		       <!-- Yunusemre -->
-        <div class="card">
-            <div class="card-info">
-                <h2>Saruhanlı Belediyesi</h2>
-                <p>https://e-imar.saruhanli.bel.tr:5545/</p>
-            </div>
-            <a href="https://e-imar.saruhanli.bel.tr:5545/" target="_blank" rel="noopener noreferrer" class="btn">Sisteme Git →</a>
-        </div>
-    </div>
+    <h1>Kısayollar</h1>
+    
+    <div id="linksContainer" class="links-container"></div>
 </div>
+
+<script>
+    // Güncellenmiş dinamik liste (Araya separator objesi eklenmiştir)
+    const portalData = [
+        { name: "Parsel Sorgu", url: "https://parselsorgu.tkgm.gov.tr/" },
+        { name: "YDS", url: "https://yds.csb.gov.tr/" },
+        { name: "EBİS", url: "https://ebistr.com/" },
+        { name: "Yapp360", url: "https://www.yapp360.com/" },
+        
+        // Genel sistemler ile belediye imzaları arasına çizgi ekledim
+        { type: "separator" },
+        
+        { name: "Akhisar İmza", url: "https://yapiruhsati.akhisar.bel.tr:8080/" },
+        { name: "Salihli İmza", url: "https://imar.salihli.bel.tr/" },
+        { name: "Soma İmza", url: "https://yapiruhsati.soma.bel.tr/" },
+        { name: "Turgutlu İmza", url: "https://yapiruhsati.turgutlu.bel.tr:5443/" },
+        { name: "Yunusemre İmza", url: "https://universe.yunusemre.bel.tr/" },
+        { name: "Saruhanlı İmza", url: "https://e-imar.saruhanli.bel.tr:5545/" }
+    ];
+
+    // Butonları ve çizgileri dinamik olarak oluşturan fonksiyon
+    function renderButtons() {
+        const container = document.getElementById('linksContainer');
+        
+        portalData.forEach(portal => {
+            // Eğer objenin tipi "separator" ise yatay çizgi (hr) oluşturur
+            if (portal.type === "separator") {
+                const hr = document.createElement('hr');
+                hr.className = 'separator';
+                container.appendChild(hr);
+            } else {
+                // Normal buton oluşturma işlemi
+                const btn = document.createElement('a');
+                btn.href = portal.url;
+                btn.target = '_blank';
+                btn.rel = 'noopener noreferrer';
+                btn.className = 'portal-btn';
+                btn.innerText = portal.name;
+                container.appendChild(btn);
+            }
+        });
+    }
+
+    // Sayfa yüklendiğinde çalıştır
+    document.addEventListener('DOMContentLoaded', renderButtons);
+</script>
 
 </body>
 </html>
