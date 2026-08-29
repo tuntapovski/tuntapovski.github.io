@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merdiven Hesabı ve Görselleştirici</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #212529;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+            --accent-color: #0d6efd;
+            --success-color: #198754;
+            --warning-color: #dc3545;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-main: #e0e0e0;
+                --text-muted: #a0a0a0;
+                --border-color: #2d2d2d;
+                --accent-color: #3d8bfd;
+                --success-color: #2eca8b;
+                --warning-color: #e35d6a;
+                --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        input, select {
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .canvas-wrapper {
+            width: 100%;
+            height: 300px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-color);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .table-wrapper {
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--text-muted);
+            position: sticky;
+            top: 0;
+        }
+
+        .results-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .summary-box {
+            background-color: var(--bg-color);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .checks-box {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checks-title {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .check-item.pass {
+            color: var(--success-color);
+        }
+
+        .check-item.fail {
+            color: var(--warning-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Merdiven Hesabı & Görselleştirici</h1>
+        <p>Türkiye İmar Yönetmeliği Uyumlu Hesaplama Aracı</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="btnTab1">Kot Görselleştirici</button>
+        <button class="tab-btn" id="btnTab2">Merdiven Hesabı</button>
+    </div>
+
+    <!-- TAB 1: Görselleştirici -->
+    <div id="tab1" class="tab-content active">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Başlangıç Kotu (m)</label>
+                <input type="number" id="vStartElev" value="0.00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Rıht Yüksekliği (cm)</label>
+                <input type="number" id="vRiserHeight" value="17.0" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Basamak Sayısı (Rıht)</label>
+                <input type="number" id="vStepCount" value="10" min="1" max="50">
+            </div>
+            <div class="form-group">
+                <label>Basan Genişliği (cm)</label>
+                <input type="number" id="vTreadDepth" value="30.0" step="1">
+            </div>
+        </div>
+
+        <div class="canvas-wrapper">
+            <canvas id="stairCanvas"></canvas>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rıht No</th>
+                        <th>Yükseklik Farkı (cm)</th>
+                        <th>Mutlak Kot (m)</th>
+                    </tr>
+                </thead>
+                <tbody id="elevationTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TAB 2: Mimari Hesaplayıcı -->
+    <div id="tab2" class="tab-content">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Başlangıç Kotu (m)</label>
+                <input type="number" id="cStartElev" value="0.00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Hedef Kot (m)</label>
+                <input type="number" id="cTargetElev" value="2.80" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Kullanım Amacı</label>
+                <select id="cType">
+                    <option value="private">Konut İçi / Müstakil (Max R: 18 cm, Min B: 25 cm)</option>
+                    <option value="public" selected>Konut Ortak / Umumi (Max R: 17.5 cm, Min B: 28 cm)</option>
+                    <option value="outdoor">Dış Mekan / Bahçe (Max R: 15 cm, Min B: 30 cm)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-wrapper">
+            <div id="calcSummary" class="summary-box"></div>
+            <div class="checks-box">
+                <div class="checks-title">Türkiye Planlı Alanlar İmar Yönetmeliği Kontrolleri</div>
+                <div id="calcChecks"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab Yönetimi
+    const btnTab1 = document.getElementById('btnTab1');
+    const btnTab2 = document.getElementById('btnTab2');
+    const tab1 = document.getElementById('tab1');
+    const tab2 = document.getElementById('tab2');
+
+    btnTab1.addEventListener('click', () => {
+        btnTab1.classList.add('active');
+        btnTab2.classList.remove('active');
+        tab1.classList.add('active');
+        tab2.classList.remove('active');
+        renderCanvas();
+    });
+
+    btnTab2.addEventListener('click', () => {
+        btnTab2.classList.add('active');
+        btnTab1.classList.remove('active');
+        tab2.classList.add('active');
+        tab1.classList.remove('active');
+        calculateStairs();
+    });
+
+    // Canvas & Tablo İşlemleri (Tab 1)
+    const canvas = document.getElementById('stairCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function renderCanvas() {
+        const w = canvas.parentElement.clientWidth;
+        const h = canvas.parentElement.clientHeight;
+        canvas.width = w;
+        canvas.height = h;
+
+        const startElev = parseFloat(document.getElementById('vStartElev').value) || 0;
+        const riser = parseFloat(document.getElementById('vRiserHeight').value) || 17;
+        const count = parseInt(document.getElementById('vStepCount').value) || 1;
+        const tread = parseFloat(document.getElementById('vTreadDepth').value) || 30;
+
+        const tbody = document.getElementById('elevationTableBody');
+        tbody.innerHTML = '';
+        for(let i = 0; i <= count; i++) {
+            const currentElevM = startElev + (i * (riser / 100));
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${i === 0 ? 'Başlangıç (0)' : i}</td>
+                <td>+${(i * riser).toFixed(1)} cm</td>
+                <td><strong>${currentElevM >= 0 ? '+' : ''}${currentElevM.toFixed(3)} m</strong></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        ctx.clearRect(0, 0, w, h);
+
+        const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const mainColor = isDark ? '#3d8bfd' : '#0d6efd';
+        const textColor = isDark ? '#a0a0a0' : '#6c757d';
+
+        const totalX = count * tread;
+        const totalY = count * riser;
+        const padding = 40;
+
+        const scale = Math.min((w - padding * 2) / totalX, (h - padding * 2) / totalY);
+
+        ctx.save();
+        ctx.translate(padding, h - padding);
+
+        ctx.beginPath();
+        ctx.strokeStyle = mainColor;
+        ctx.lineWidth = 2;
+
+        let x = 0;
+        let y = 0;
+        ctx.moveTo(x, -y);
+
+        for (let i = 0; i < count; i++) {
+            y += riser * scale;
+            ctx.lineTo(x, -y);
+            x += tread * scale;
+            ctx.lineTo(x, -y);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = textColor;
+        ctx.font = '12px sans-serif';
+        ctx.fillText(`Başlangıç: ${startElev.toFixed(2)} m`, 0, 20);
+        ctx.fillText(`Varış: ${(startElev + count * (riser / 100)).toFixed(2)} m`, x - 40, -y - 10);
+
+        ctx.restore();
+    }
+
+    // Mimari Hesap ve Mevzuat Kontrolleri (Tab 2)
+    function calculateStairs() {
+        const start = parseFloat(document.getElementById('cStartElev').value) || 0;
+        const target = parseFloat(document.getElementById('cTargetElev').value) || 0;
+        const type = document.getElementById('cType').value;
+
+        const totalDiffCm = Math.abs(target - start) * 100;
+        const summaryBox = document.getElementById('calcSummary');
+        const checksContainer = document.getElementById('calcChecks');
+
+        if (totalDiffCm === 0) {
+            summaryBox.innerHTML = '<strong>Farklı başlangıç ve hedef kotları giriniz.</strong>';
+            checksContainer.innerHTML = '-';
+            return;
+        }
+
+        // Kullanım amacına göre ideal ve sınır değerler
+        let idealRiser = 16.5;
+        let maxAllowedRiser = 17.5;
+        let minAllowedTread = 28;
+
+        if (type === 'private') {
+            idealRiser = 17.5;
+            maxAllowedRiser = 18.0;
+            minAllowedTread = 25;
+        } else if (type === 'outdoor') {
+            idealRiser = 14.0;
+            maxAllowedRiser = 15.0;
+            minAllowedTread = 30;
+        }
+
+        // Basamak sayısı ve gerçekleşen rıht/basan
+        let stepCount = Math.round(totalDiffCm / idealRiser) || 1;
+        const actualRiser = totalDiffCm / stepCount;
+        
+        // Blondel Formülü: 2R + B = 63 cm kabulü
+        const calculatedTread = Math.round(63 - (2 * actualRiser));
+        const blondelVal = (2 * actualRiser) + calculatedTread;
+
+        // KONTROLLER
+        const checkRiser = actualRiser <= maxAllowedRiser && actualRiser >= 12;
+        const checkTread = calculatedTread >= minAllowedTread;
+        const checkBlondel = blondelVal >= 60 && blondelVal <= 64;
+
+        // Özet Kutusu Yazımı
+        summaryBox.innerHTML = `
+            <div><strong>Toplam Kot Farkı:</strong> ${totalDiffCm.toFixed(1)} cm</div>
+            <div><strong>Hesaplanan Rıht Sayısı:</strong> ${stepCount} Adet</div>
+            <div><strong>Rıht Yüksekliği (R):</strong> ${actualRiser.toFixed(2)} cm</div>
+            <div><strong>Basan Genişliği (B):</strong> ${calculatedTread} cm</div>
+        `;
+
+        // Detaylı Yönetmelik Kontrollerinin Ekrana Basılması
+        checksContainer.innerHTML = `
+            <div class="check-item ${checkRiser ? 'pass' : 'fail'}">
+                <span>${checkRiser ? '✓' : '✕'}</span>
+                <span><strong>Rıht Yüksekliği Kontrolü:</strong> ${actualRiser.toFixed(2)} cm (Yönetmelik üst sınırı: ${maxAllowedRiser} cm)</span>
+            </div>
+            <div class="check-item ${checkTread ? 'pass' : 'fail'}">
+                <span>${checkTread ? '✓' : '✕'}</span>
+                <span><strong>Basan Genişliği Kontrolü:</strong> ${calculatedTread} cm (Yönetmelik alt sınırı: min ${minAllowedTread} cm)</span>
+            </div>
+            <div class="check-item ${checkBlondel ? 'pass' : 'fail'}">
+                <span>${checkBlondel ? '✓' : '✕'}</span>
+                <span><strong>Adım Orantısı (Blondel Kontrolü):</strong> 2R + B = ${blondelVal.toFixed(1)} cm (İdeal aralık: 60 - 64 cm)</span>
+            </div>
+        `;
+    }
+
+    // Dinamik Dinleyiciler
+    ['vStartElev', 'vRiserHeight', 'vStepCount', 'vTreadDepth'].forEach(id => {
+        document.getElementById(id).addEventListener('input', renderCanvas);
+    });
+
+    ['cStartElev', 'cTargetElev', 'cType'].forEach(id => {
+        document.getElementById(id).addEventListener('input', calculateStairs);
+    });
+
+    window.addEventListener('resize', renderCanvas);
+    
+    // İlk çalıştırma
+    renderCanvas();
+    calculateStairs();
+</script>
+
+</body>
+</html>
